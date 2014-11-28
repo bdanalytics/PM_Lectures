@@ -146,3 +146,37 @@ token.game(page_9_pn, steps=4, high.priority.trans="t2",
 token.game(page_9_pn, steps=4, high.priority.trans="t3",
            animate=TRUE, reset=TRUE, wait=100)
 
+## page_19
+page_19_pn <- petrinet(name="page_19",
+                      trans_df=data.frame(id=1:5, name=c("a", "b", "c", "d", "e"),
+                                          x=c( 5, 15, 15, 25, 15),
+                                          y=c(10, 20,  0, 10, 10),
+                                          stringsAsFactors=FALSE),
+    places_df=data.frame(id=1:6, name=c("start", "p1", "p2", "p3", "p4", "end"),
+                                           x=c(-5, 5, 5, 25, 25, 35),
+                                           y=c(10, 15,  5, 15,  5, 10),
+                                           M0=c(1, 0, 0, 0, 0, 0),
+                                           stringsAsFactors=FALSE),
+                      arcs_df=data.frame(
+    begin=c("start", "a",  "a",  "p1", "p1", "p2", "p2", "b" , "e" , "e" , "c", "p3", "p4", "d"),
+    end  =c("a",     "p1", "p2", "b",  "e",  "e",  "c",  "p3", "p3", "p4", "p4", "d",  "d",  "end"),
+                          stringsAsFactors=FALSE))
+plot.petrinet(page_19_pn)
+
+### replay abcd
+# replay_page_19_pn <-
+#     token.game(page_19_pn, steps=1, high.priority.trans="a",
+#                animate=TRUE, reset=TRUE, wait=100)
+# replay_page_19_pn <-
+#     token.game(replay_page_19_pn, steps=1, high.priority.trans="b",
+#            animate=TRUE, reset=FALSE, wait=100)
+# replay_page_19_pn <-
+#     token.game(replay_page_19_pn, steps=1, high.priority.trans="c",
+#                animate=TRUE, reset=FALSE, wait=100)
+# replay_page_19_pn <-
+#     token.game(replay_page_19_pn, steps=1, high.priority.trans="d",
+#                animate=TRUE, reset=FALSE, wait=100)
+
+replay.petrisim(pn=page_19_pn, replay.trans=c("a", "b", "c", "d"))
+replay.petrisim(pn=page_19_pn, replay.trans=c("a", "e", "d"))
+replay.petrisim(pn=page_19_pn, replay.trans=c("a", "c", "d"))
