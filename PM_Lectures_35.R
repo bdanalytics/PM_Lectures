@@ -53,48 +53,7 @@ page23_traces_df <- data.frame(trace=c(
 ), stringsAsFactors=FALSE)
 #print(page23_traces_df)
 print(footprint.traces(page23_traces_df))
-
-freq.traces <- function(traces_df) {
-    unique_trans <- unique.trans(traces_df)
-    L_freq_mtrx <- matrix(rep(0, length(unique_trans) ^ 2),
-                     nrow=length(unique_trans),
-                     dimnames=list(unique_trans, unique_trans))
-
-    # Count direct succession freq by trace
-    for (trc in 1:nrow(traces_df)) {
-        transs <- unlist(strsplit(traces_df$trace[trc], split=","))
-        for (trs in 1:length(transs)) {
-            if (trs != length(transs)) {
-                L_freq_mtrx[transs[trs], transs[trs+1]] <-
-                    L_freq_mtrx[transs[trs], transs[trs+1]] + 1
-            }
-        }
-    }
-
-    return(L_freq_mtrx)
-}
 page23_L_freq_mtrx <- freq.traces(traces_df=page23_traces_df)
 print(page23_L_freq_mtrx)
-
-dependency.traces <- function(L_freq_mtrx) {
-    L_depnd_mtrx <- matrix(rep(0, nrow(L_freq_mtrx) ^ 2),
-                          nrow=nrow(L_freq_mtrx),
-                          dimnames=dimnames(L_freq_mtrx))
-
-    # Compute dependencies for each element in matrix
-    for (row in 1:nrow(L_freq_mtrx))
-        for (col in 1:ncol(L_freq_mtrx))
-            if (row == col) {
-                L_depnd_mtrx[row, col] <-
-                    (L_freq_mtrx[row, col] * 1.0) / (L_freq_mtrx[row, col] + 1)
-            } else {
-                L_depnd_mtrx[row, col] <-
-                    ((L_freq_mtrx[row, col] * 1.0) -
-                     (L_freq_mtrx[col, row] * 1.0)) /
-                    (L_freq_mtrx[row, col] + L_freq_mtrx[col, row] + 1)
-            }
-
-    return(L_depnd_mtrx)
-}
 page23_L_depnd_mtrx <- dependency.traces(L_freq_mtrx=page23_L_freq_mtrx)
 print(page23_L_depnd_mtrx)
